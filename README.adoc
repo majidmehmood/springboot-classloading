@@ -1,0 +1,23 @@
+*Spring-boot Classloading*
+
+Spring Boot executable JAR file contains additional attributes (headers) in manifest file (META-INF/MANIFEST.MF) which helps spring to load nested JAR files which is not otherwise supported from existing JAR-related API like JarClassLoader (extends java.net.URLClassLoader).
+
+*How standard Java does it?*
+
+But let's start first with a standard JAR file. Imagine there is an api.jar, and its manifest file has the content given below. Design wise, in a standard jar file, classes (in packages) are placed on the root of the jar and consequently standard classloading was designed in this way. Attribute Class-Path is useful for loading external jars but its usage is limited since it cannot refer to a nested jar file even when it's placed on the root of the jar.
+
+----
+Main-Class : com.majid.Application
+Class-Path: dependency_jar_on_filesystem_or_network.jar
+----
+
+*How does Spring Boot do it?*
+
+Springboot Maven plugin will create the JAR file constituting `META-INF`, `BOOT-INF/lib`,`BOOT-INF/classes` and `org/springframework/boot/loader/` directories. The manifest file would contain something similar as below.
+
+----
+Main-Class: org.springframework.boot.loader.JarLauncher
+Start-Class: com.majid.Application
+----
+
+JarLauncher is now the entry point class which internally will use Spring Boot classloader classes (mainly `launchedurlclassloader`, it also an extension of URLClassLoader) to load classes from `BOOT-INF/lib` directory and `BOOT-INF/classes` respectively.

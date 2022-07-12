@@ -20,4 +20,4 @@ Main-Class: org.springframework.boot.loader.JarLauncher
 Start-Class: com.majid.Application
 ----
 
-JarLauncher is now the entry point class which internally will use Spring Boot classloader classes (mainly `launchedurlclassloader`, it also an extension of URLClassLoader) to load classes from `BOOT-INF/lib` directory and `BOOT-INF/classes` respectively.
+JarLauncher is now the entry point class which internally will use Spring Boot classloader classes (mainly `launchedurlclassloader`, it also an extension of URLClassLoader) to load nested jars from `BOOT-INF/lib` directory and classes from `BOOT-INF/classes` respectively.
